@@ -132,12 +132,62 @@
     filter: drop-shadow(0 0 8px rgba(240,165,0,0.6));
   }
 
-  .star-btn.pulse .star-svg { animation: starPulse 0.3s ease; }
+  /* Hover — highlight stars up to hovered one */
+  .stars-row:hover .star-btn .star-svg {
+    fill: var(--gold-dim);
+    filter: none;
+  }
+
+  .stars-row .star-btn:hover ~ .star-btn .star-svg {
+    fill: var(--gold-dim);
+    filter: none;
+  }
+
+  .stars-row .star-btn:hover .star-svg,
+  .stars-row .star-btn:hover ~ .star-btn.lit .star-svg {
+    fill: var(--gold);
+    filter: drop-shadow(0 0 10px rgba(240,165,0,0.7));
+  }
+
+  /* Override — when hovering, light up all stars before hovered one */
+  .stars-row:hover .star-btn.before-hover .star-svg {
+    fill: var(--gold);
+    filter: drop-shadow(0 0 8px rgba(240,165,0,0.5));
+  }
+
+  .star-btn.pulse .star-svg { animation: starPulse 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
   @keyframes starPulse {
     0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-    100% { transform: scale(1); }
+    50% { transform: scale(1.4) rotate(-8deg); }
+    75% { transform: scale(0.95) rotate(4deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  .star-btn {
+    position: relative;
+  }
+
+  .star-btn::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(240,165,0,0.15) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+
+  .star-btn:hover::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .star-btn.lit::after {
+    opacity: 0.6;
+    transform: scale(1);
   }
 
   .rating-label {
@@ -344,7 +394,7 @@
 
 <!-- RATING SCREEN -->
 <div class="screen" id="rating-screen">
-  <div class="restaurant-name" id="restaurant-label">DineFeedback</div>
+  <div class="restaurant-name" id="restaurant-label">Cafe Puru</div>
   <div class="main-question">How was your<br><em>experience?</em></div>
   <div class="sub-text">Tap a star to rate — takes 5 seconds</div>
 
@@ -420,9 +470,11 @@
     document.querySelectorAll('.star-btn').forEach(btn => {
       const bVal = parseInt(btn.dataset.val);
       btn.classList.toggle('lit', bVal <= val);
+      btn.classList.remove('pulse');
       if (bVal === val) {
+        void btn.offsetWidth; // reflow to restart animation
         btn.classList.add('pulse');
-        setTimeout(() => btn.classList.remove('pulse'), 300);
+        setTimeout(() => btn.classList.remove('pulse'), 400);
       }
     });
     const label = document.getElementById('rating-label');
@@ -430,6 +482,37 @@
     label.classList.add('visible');
     document.getElementById('submit-btn').classList.add('visible');
   }
+
+  // Hover preview — light up stars on mouse enter
+  document.querySelectorAll('.star-btn').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      const hoverVal = parseInt(btn.dataset.val);
+      document.querySelectorAll('.star-btn').forEach(b => {
+        const bVal = parseInt(b.dataset.val);
+        if (bVal <= hoverVal) {
+          b.querySelector('.star-svg').style.fill = 'var(--gold)';
+          b.querySelector('.star-svg').style.filter = 'drop-shadow(0 0 8px rgba(240,165,0,0.5))';
+        } else {
+          b.querySelector('.star-svg').style.fill = 'var(--gold-dim)';
+          b.querySelector('.star-svg').style.filter = 'none';
+        }
+      });
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      // Restore to selected state
+      document.querySelectorAll('.star-btn').forEach(b => {
+        const bVal = parseInt(b.dataset.val);
+        if (bVal <= selectedRating) {
+          b.querySelector('.star-svg').style.fill = 'var(--gold)';
+          b.querySelector('.star-svg').style.filter = 'drop-shadow(0 0 8px rgba(240,165,0,0.6))';
+        } else {
+          b.querySelector('.star-svg').style.fill = 'var(--gold-dim)';
+          b.querySelector('.star-svg').style.filter = 'none';
+        }
+      });
+    });
+  });
 
   // POSITIVE — fires ONE event here, no second event
   function submitRating() {
