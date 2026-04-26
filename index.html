@@ -13,9 +13,6 @@
     --gold-dim: #7a5200;
     --cream: #f5efe6;
     --muted: #5a5248;
-    --accent: #e8572a;
-    --green: #2ecc71;
-    --red: #e74c3c;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -27,7 +24,6 @@
     overflow: hidden;
   }
 
-  /* Ambient background */
   body::before {
     content: '';
     position: fixed;
@@ -39,7 +35,6 @@
     z-index: 0;
   }
 
-  /* Grain texture */
   body::after {
     content: '';
     position: fixed;
@@ -69,7 +64,6 @@
     transform: scale(0.96);
   }
 
-  /* RATING SCREEN */
   .restaurant-name {
     font-family: 'Fraunces', serif;
     font-size: 13px;
@@ -94,11 +88,7 @@
     animation: fadeUp 0.6s ease 0.35s forwards;
   }
 
-  .main-question em {
-    font-style: italic;
-    color: var(--gold);
-    font-weight: 300;
-  }
+  .main-question em { font-style: italic; color: var(--gold); font-weight: 300; }
 
   .sub-text {
     font-size: 14px;
@@ -109,7 +99,6 @@
     animation: fadeUp 0.6s ease 0.45s forwards;
   }
 
-  /* Stars */
   .stars-row {
     display: flex;
     gap: 12px;
@@ -125,7 +114,6 @@
     border: none;
     cursor: pointer;
     padding: 0;
-    position: relative;
     transition: transform 0.15s ease;
   }
 
@@ -135,7 +123,6 @@
     width: 100%;
     height: 100%;
     fill: var(--gold-dim);
-    stroke: none;
     transition: fill 0.2s ease, filter 0.2s ease;
     filter: drop-shadow(0 0 0px transparent);
   }
@@ -145,9 +132,7 @@
     filter: drop-shadow(0 0 8px rgba(240,165,0,0.6));
   }
 
-  .star-btn.pulse .star-svg {
-    animation: starPulse 0.3s ease;
-  }
+  .star-btn.pulse .star-svg { animation: starPulse 0.3s ease; }
 
   @keyframes starPulse {
     0% { transform: scale(1); }
@@ -155,7 +140,6 @@
     100% { transform: scale(1); }
   }
 
-  /* Rating label */
   .rating-label {
     height: 24px;
     font-family: 'Fraunces', serif;
@@ -170,7 +154,6 @@
 
   .rating-label.visible { opacity: 1; }
 
-  /* Submit button */
   .submit-btn {
     width: 100%;
     max-width: 280px;
@@ -199,15 +182,9 @@
   .submit-btn:active { transform: scale(0.97); }
 
   /* FEEDBACK SCREEN */
-  #feedback-screen {
-    gap: 20px;
-  }
+  #feedback-screen { gap: 20px; }
 
-  .feedback-icon {
-    font-size: 52px;
-    opacity: 0;
-    animation: fadeUp 0.5s ease 0.1s forwards;
-  }
+  .feedback-icon { font-size: 52px; opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards; }
 
   .feedback-title {
     font-family: 'Fraunces', serif;
@@ -253,11 +230,12 @@
     width: 100%;
     max-width: 320px;
     padding: 18px;
-    background: var(--surface);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--gold);
+    border: none;
     border-radius: 100px;
-    color: var(--cream);
+    color: #0c0a08;
     font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
     font-size: 15px;
     cursor: pointer;
     opacity: 0;
@@ -265,12 +243,10 @@
     transition: all 0.2s;
   }
 
-  .feedback-submit:active { background: rgba(255,255,255,0.05); transform: scale(0.97); }
+  .feedback-submit:active { transform: scale(0.97); }
 
-  /* THANK YOU SCREEN */
-  #thankyou-screen {
-    gap: 16px;
-  }
+  /* THANK YOU SCREENS */
+  #thankyou-screen, #negative-screen { gap: 16px; }
 
   .ty-ring {
     width: 100px;
@@ -354,29 +330,13 @@
     margin-bottom: 4px;
   }
 
-  .coupon-detail {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
+  .coupon-detail { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 
-  /* NEGATIVE THANK YOU */
-  #negative-screen {
-    gap: 16px;
-  }
+  .divider { width: 40px; height: 1px; background: rgba(255,255,255,0.08); margin: 4px auto; }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Divider line */
-  .divider {
-    width: 40px;
-    height: 1px;
-    background: rgba(255,255,255,0.08);
-    margin: 4px auto;
   }
 </style>
 </head>
@@ -385,11 +345,10 @@
 <!-- RATING SCREEN -->
 <div class="screen" id="rating-screen">
   <div class="restaurant-name" id="restaurant-label">DineFeedback</div>
-
   <div class="main-question">How was your<br><em>experience?</em></div>
   <div class="sub-text">Tap a star to rate — takes 5 seconds</div>
 
-  <div class="stars-row" id="stars-row">
+  <div class="stars-row">
     <button class="star-btn" data-val="1" onclick="selectStar(1)">
       <svg class="star-svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
     </button>
@@ -416,7 +375,7 @@
   <div class="ty-ring">🙏</div>
   <div class="ty-title">Thank you so<br><em>much!</em></div>
   <div class="ty-sub">We're thrilled you had a great experience. Would you share it on Google?</div>
-  <a class="google-btn" id="google-review-btn" href="#" target="_blank">
+  <a class="google-btn" id="google-review-btn" href="https://g.page/r/YOUR_GOOGLE_REVIEW_LINK" target="_blank">
     ⭐ Leave a Google Review
   </a>
   <div class="divider"></div>
@@ -426,7 +385,7 @@
   </div>
 </div>
 
-<!-- FEEDBACK SCREEN (negative) -->
+<!-- FEEDBACK SCREEN -->
 <div class="screen hidden" id="feedback-screen">
   <div class="feedback-icon">😔</div>
   <div class="feedback-title">We're sorry to<br>hear that</div>
@@ -443,16 +402,13 @@
 </div>
 
 <script>
-  // CONFIG — replace these per restaurant client
   const CONFIG = {
-    restaurantName: 'DineFeedback',
     googleReviewUrl: 'https://g.page/r/YOUR_GOOGLE_REVIEW_LINK',
-    webhookUrl: 'https://smarterautomations.app.n8n.cloud/webhook/dinefeedback', // n8n webhook endpoint
+    webhookUrl: 'https://smarterautomations.app.n8n.cloud/webhook/dinefeedback',
   };
 
-  // Read restaurant from URL param e.g. ?r=cafepuru
   const params = new URLSearchParams(window.location.search);
-  const restaurant = params.get('r') || CONFIG.restaurantName;
+  const restaurant = params.get('r') || 'DineFeedback';
   document.getElementById('restaurant-label').textContent = restaurant;
   document.getElementById('google-review-btn').href = CONFIG.googleReviewUrl;
 
@@ -461,8 +417,6 @@
 
   function selectStar(val) {
     selectedRating = val;
-
-    // Light up stars
     document.querySelectorAll('.star-btn').forEach(btn => {
       const bVal = parseInt(btn.dataset.val);
       btn.classList.toggle('lit', bVal <= val);
@@ -471,66 +425,56 @@
         setTimeout(() => btn.classList.remove('pulse'), 300);
       }
     });
-
-    // Show label
     const label = document.getElementById('rating-label');
     label.textContent = labels[val];
     label.classList.add('visible');
-
-    // Show submit
     document.getElementById('submit-btn').classList.add('visible');
   }
 
+  // POSITIVE — fires ONE event here, no second event
   function submitRating() {
     if (!selectedRating) return;
-
-    // Send to n8n webhook
-    fetch(CONFIG.webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    if (selectedRating >= 4) {
+      sendToWebhook({
         rating: selectedRating,
         restaurant: restaurant,
+        feedback: '',
+        sentiment: 'Positive',
         timestamp: new Date().toISOString(),
         type: 'rating'
-      })
-    }).catch(() => {}); // silent fail — don't block UX
-
-    if (selectedRating >= 4) {
+      });
       showScreen('thankyou-screen');
     } else {
+      // Don't fire yet — wait for feedback text
       showScreen('feedback-screen');
     }
   }
 
+  // NEGATIVE — fires ONE event here with feedback text included
   function submitFeedback() {
-    const text = document.getElementById('feedback-text').value;
+    const text = document.getElementById('feedback-text').value.trim();
+    sendToWebhook({
+      rating: selectedRating,
+      restaurant: restaurant,
+      feedback: text,
+      sentiment: 'Negative',
+      timestamp: new Date().toISOString(),
+      type: 'feedback'
+    });
+    showScreen('negative-screen');
+  }
 
+  function sendToWebhook(data) {
     fetch(CONFIG.webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        rating: selectedRating,
-        restaurant: restaurant,
-        feedback: text,
-        timestamp: new Date().toISOString(),
-        type: 'feedback'
-      })
+      body: JSON.stringify(data)
     }).catch(() => {});
-
-    showScreen('negative-screen');
   }
 
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    const target = document.getElementById(id);
-    target.classList.remove('hidden');
-    // Re-trigger animations
-    target.querySelectorAll('[style*="animation"]').forEach(el => {
-      el.style.animation = 'none';
-      el.offsetHeight;
-      el.style.animation = '';
-    });
+    document.getElementById(id).classList.remove('hidden');
   }
 </script>
 </body>
